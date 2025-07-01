@@ -55,7 +55,7 @@ jobs:
           ghcr.io/${{ github.repository }}:latest  
 
     - name: restart docker-compose # Docker Composeを再起動
-      working-directory: /app/docker-compose
+      working-directory: /app
       run: |
         # Docker Composeを使用してサービスを再起動
         docker-compose down && docker-compose pull && docker-compose up -d
