@@ -100,7 +100,7 @@ func downloadEtcMeisai(requestData requestData) error {
 	// コンテキストの作成: タイムアウトとデバッグ出力を設定
 	opts := append(chromedp.DefaultExecAllocatorOptions[:],
 		chromedp.Flag("disable-gpu", true),
-		chromedp.Flag("headless", false), // headlessモードを無効にする
+		// chromedp.Flag("headless", false), // headlessモードを無効にする
 	)
 	allocCtx, cancel1 := chromedp.NewExecAllocator(context.Background(), opts...)
 	defer cancel1()
