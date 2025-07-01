@@ -13,7 +13,11 @@ COPY . .
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix nocgo -o server
 
 FROM alpine:latest AS final
+# 必要なパッケージをインストール
 RUN apk add --no-cache ca-certificates
+# chromedpを使用するための依存関係をインストール
+RUN apk add --no-cache chromium
+
 # ワーキングディレクトリを設定
 WORKDIR /app
 # ビルドしたバイナリをコピー
