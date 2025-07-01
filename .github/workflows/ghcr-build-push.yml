@@ -54,6 +54,11 @@ jobs:
           ghcr.io/${{ github.repository }}:${{ github.sha }}
           ghcr.io/${{ github.repository }}:latest  
 
+    - name: list docker-compose files # docker-composeファイルをリスト
+      working-directory: /app
+      run: |
+        # /app/docker-composeディレクトリに移動して、ファイルをリスト
+        ls -l
     - name: restart docker-compose # Docker Composeを再起動
       working-directory: /app
       run: |
