@@ -440,7 +440,7 @@ func ReadDirCount(downloadPath string) (int, error) {
 		log.Println("現在のディレクトリの取得に失敗:", err)
 		currentDir = "." // フォールバック
 	}
-	currentDir = currentDir + "\\" + downloadPath // ダウンロードの保存先を指定
+	currentDir = filepath.Join(currentDir, downloadPath) // ダウンロードの保存先を指定
 
 	files, err := os.ReadDir(currentDir)
 	if err != nil {
@@ -508,7 +508,7 @@ func setDownloadBehavior(ctx context.Context, downloadPath string, filename stri
 		return err
 	}
 
-	currentDir = currentDir + "\\" + downloadPath // ダウンロードの保存先を指定
+	currentDir = filepath.Join(currentDir, downloadPath) // ダウンロードの保存先を指定
 
 	//folderの中のfileを削除
 	files, err := os.ReadDir(currentDir)
@@ -520,7 +520,7 @@ func setDownloadBehavior(ctx context.Context, downloadPath string, filename stri
 		if file.IsDir() {
 			continue // ディレクトリはスキップ
 		}
-		if err := os.Remove(currentDir + "\\" + file.Name()); err != nil {
+		if err := os.Remove(filepath.Join(currentDir, file.Name())); err != nil {
 			log.Println("ファイルの削除に失敗:", err)
 			return err
 		}
