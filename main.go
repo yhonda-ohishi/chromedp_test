@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"path/filepath"
 	"sort"
 	"strconv"
 	"strings"
@@ -321,7 +322,7 @@ func changeDownloadedFileName(downloadPath string, newNames ...string) error {
 		log.Println("現在のディレクトリの取得に失敗:", err)
 		currentDir = "." // フォールバック
 	}
-	currentDir = currentDir + "\\" + downloadPath // ダウンロードの保存先を指定
+	currentDir = filepath.Join(currentDir, downloadPath) // ダウンロードの保存先を指定
 
 	// ダウンロードの保存先のディレクトリを確認
 	if _, err := os.Stat(currentDir); os.IsNotExist(err) {
@@ -347,8 +348,8 @@ func changeDownloadedFileName(downloadPath string, newNames ...string) error {
 		stringIn := stringInSlice(oldName, newNames...)
 		if !stringIn {
 			//oldNameがnewNamesに含まれていなければ、名前を変更
-			oldFilePath := currentDir + "\\" + oldName
-			newFilePath := currentDir + "\\" + newNames[count]
+			oldFilePath := filepath.Join(currentDir, oldName)
+			newFilePath := filepath.Join(currentDir, newNames[count])
 			err := os.Rename(oldFilePath, newFilePath)
 			handleError(err, "ファイル名の変更に失敗")
 			changed = true
