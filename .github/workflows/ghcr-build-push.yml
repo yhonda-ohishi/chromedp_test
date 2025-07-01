@@ -57,6 +57,7 @@ jobs:
     - name: restart docker-compose # Docker Composeを再起動
       working-directory: /app
       run: |
+        ls
         # Docker Composeを使用してサービスを再起動
         docker-compose down && docker-compose pull && docker-compose up -d
         # docker compose -f /app/docker-compose/docker-compose.yaml down && docker compose -f /app/docker-compose/docker-compose.yaml pull && docker compose -f /app/docker-compose/docker-compose.yaml up -d
