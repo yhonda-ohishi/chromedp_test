@@ -45,6 +45,14 @@ jobs:
         # GitHub ActionsのGITHUB_TOKENをパスワードとして使用し、GHCRにログイン
         echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
+
+    # 👇 ここに新しいステップを追加します！
+    - name: Set IMAGE_NAME for Docker Compose
+      run: |
+        # GHCRにプッシュされたイメージのフルパスを環境変数に設定
+        echo "IMAGE_NAME=ghcr.io/${{ github.repository }}:latest" >> $GITHUB_ENV
+
+
     - name: Build and push Docker image # DockerイメージをビルドしてGHCRにプッシュ
       uses: docker/build-push-action@v5
       with:
