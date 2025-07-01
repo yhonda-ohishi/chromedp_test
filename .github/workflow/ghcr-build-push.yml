@@ -1,0 +1,86 @@
+name: Build & Push to GitHub Container Registry
+
+on:
+
+  push:
+    branches: [ "main" ] # mainブランチにプッシュされたときにトリガー
+  pull_request:
+    branches: [ "main" ] # mainブランチへのプルリクエストがあったときにトリガー
+  workflow_dispatch: # 手動実行を可能にする
+
+
+env:
+  # イメージ名はリポジトリ名と一致させるのが一般的
+  # ここでは小文字に変換しています。
+  IMAGE_NAME: chromedp_test # イメージ名（リポジトリ名）
+
+jobs:
+  build_and_push_image:
+    # runs-on: ubuntu-latest # ジョブを実行するOS
+    runs-on: self-hosted # ここが重要！Self-hosted runner を指定
+
+
+
+    permissions:
+      contents: read       # コードを読み取る権限
+      packages: write      # GHCRにパッケージ（イメージ）を書き込む権限
+
+    steps:
+    - name: Checkout repository # リポジトリをチェックアウト
+      uses: actions/checkout@v4
+
+
+
+      # 👇 ここから新しいステップを追加します！
+
+      # 👆 ここまで新しいステップ
+    # - name: Log in to the Container registry
+    #   uses: docker/login-action@v3
+    #   with:
+    #     registry: ghcr.io
+    #     username: ${{ github.actor }}
+    #     password: ${{ secrets.GITHUB_TOKEN }} #
+    - name: Manual Docker Login to GHCR
+      run: |
+        # GitHub ActionsのGITHUB_TOKENをパスワードとして使用し、GHCRにログイン
+        echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+    - name: Build and push Docker image # DockerイメージをビルドしてGHCRにプッシュ
+      uses: docker/build-push-action@v5
+      with:
+        context: . # Dockerfileがあるディレクトリ
+        push: true # GHCRにプッシュする
+        tags: |
+          ghcr.io/${{ github.repository }}:${{ github.sha }}
+          ghcr.io/${{ github.repository }}:latest  
+
+    - name: restart docker-compose # Docker Composeを再起動
+      working-directory: /app/docker-compose
+      run: |
+        # Docker Composeを使用してサービスを再起動
+        docker-compose down && docker-compose pull && docker-compose up -d
+        # docker compose -f /app/docker-compose/docker-compose.yaml down && docker compose -f /app/docker-compose/docker-compose.yaml pull && docker compose -f /app/docker-compose/docker-compose.yaml up -d
+        # docker compose -f /app/docker-compose/docker-compose.yml down && docker compose -f /app/docker-compose/docker-compose.yml pull && docker compose -f /app/docker-compose/docker-compose.yml up -d
+        # docker compose -f /app/docker-compose.yml down && docker compose -f /app/docker-compose.yml pull && docker compose -f /app/docker-compose.yml up -d
+
+    # - name: Log in to the Container registry
+    #   uses: docker/login-action@v3
+    #   with:
+    #     registry: ghcr.io
+    #     username: ${{ github.actor }}
+    #     password: ${{ secrets.GITHUB_TOKEN }} # これが重要
+        
+
+    # - name: Set up Docker Buildx # Docker Buildx をセットアップ
+    #   uses: docker/setup-buildx-action@v3
+
+    # - name: Build and push Docker image # DockerイメージをビルドしてGHCRにプッシュ
+    #   uses: docker/build-push-action@v5
+    #   with:
+    #     context: . # Dockerfileがあるディレクトリ
+    #     push: true # GHCRにプッシュする
+    #     tags: |
+    #       ghcr.io/${{ github.repository }}:${{ github.sha }} # コミットSHAをタグとして使用
+    #       ghcr.io/${{ github.repository }}:latest          
+        # build-args: | # <-- このセクションを追加
+        #   GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  runner:
+    image: ${GITHUB_IMAGE_NAME}
+    container_name: ${CONTAINER_NAME}
+    restart: always
+    volumes:
+      - ./logs:/root/logs
+      - ./file:/root/file
+    networks:
+      - ${NETWORK_NAME:-posgres-net}
+    pull_policy: always
+
+networks:
+  posgres-net:
+    external: true
