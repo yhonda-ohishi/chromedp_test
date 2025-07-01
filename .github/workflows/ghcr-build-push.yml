@@ -51,6 +51,8 @@ jobs:
       run: |
         # GHCRにプッシュされたイメージのフルパスを環境変数に設定
         echo "IMAGE_NAME=ghcr.io/${{ github.repository }}:latest" >> $GITHUB_ENV
+        echo "CONTAINER_NAME=${{ vars.CONTAINER_NAME_VAR }}" >> $GITHUB_ENV
+      
 
 
     - name: Build and push Docker image # DockerイメージをビルドしてGHCRにプッシュ
