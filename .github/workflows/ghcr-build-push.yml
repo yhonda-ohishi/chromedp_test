@@ -55,12 +55,12 @@ jobs:
           ghcr.io/${{ github.repository }}:latest  
 
     - name: list docker-compose files # docker-composeファイルをリスト
-      working-directory: /app
+      working-directory: /actions-runner/_work/chromedp_test/chromedp_test
       run: |
         # /app/docker-composeディレクトリに移動して、ファイルをリスト
         ls -l
     - name: restart docker-compose # Docker Composeを再起動
-      working-directory: /app
+      working-directory: /actions-runner/_work/chromedp_test/chromedp_test
       run: |
         ls
         # Docker Composeを使用してサービスを再起動
