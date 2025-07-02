@@ -75,8 +75,8 @@ jobs:
 
     - name: Build and Push Docker image to Cloudflare Registry 
       run: | 
-        docker tag ghcr.io/${{ github.repository }}:latest ${{ github.repository }}:latest
-        wrangler containers push ${{ github.repository }}:latest
+        docker tag ghcr.io/${{ github.repository }}:latest test-image:latest
+        wrangler containers push test-image:latest
       env:
         CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }} # wrangler containers push 用
         CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}  # wrangler containers push 用
