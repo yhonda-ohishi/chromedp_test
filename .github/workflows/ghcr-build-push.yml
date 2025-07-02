@@ -80,7 +80,7 @@ jobs:
       #   wrangler containers push test-image:latest
       run: | 
         ls
-        wrangler containers build . --push --tag test-image:latest --dockerfile dockerfile
+        wrangler containers build . --push --tag test-image:latest
 
     - name: list docker-compose files # docker-composeファイルをリスト
       working-directory: /actions-runner/_work/chromedp_test/chromedp_test
