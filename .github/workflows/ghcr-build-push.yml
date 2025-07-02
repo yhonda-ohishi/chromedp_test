@@ -80,15 +80,8 @@ jobs:
           ghcr.io/${{ github.repository }}:latest  
 
 
-    - name: Build and Push Docker image to Cloudflare Registry # DockerイメージをビルドしてCloudflare Registryにプッシュ
-      run: |
-        # latest タグを使用していますが、バージョン管理のためにコミットSHAなどをタグとして追加することも検討してください
-        # docker push の代わりに wrangler containers push を使用します。
-        # wrangler containers push は環境変数 CLOUDFLARE_API_TOKEN と CLOUDFLARE_ACCOUNT_ID を使用して認証します。
-        wrangler containers push ${{ github.repository }}:latest
-      env:
-        CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }} # wrangler containers push 用
-        CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }} 
+    - name: Build and Push Docker image to Cloudflare Registry 
+      run: docker ps
 
     - name: list docker-compose files # docker-composeファイルをリスト
       working-directory: /actions-runner/_work/chromedp_test/chromedp_test
