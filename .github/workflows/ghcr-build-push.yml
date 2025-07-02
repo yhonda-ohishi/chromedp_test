@@ -48,7 +48,8 @@ jobs:
     - name: cloudflare login
       uses: cloudflare/wrangler-action@v3
       with:
-        apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }} # Cloudflare APIトークンを使用してログイン
+        apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+
 
 
     # 👇 ここに新しいステップを追加します！
