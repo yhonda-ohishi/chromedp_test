@@ -82,9 +82,7 @@ jobs:
 
     - name: Build and Push Docker image to Cloudflare Registry 
       run: | 
-        docker ps
-        docker exec  wrangler-runner docker pull ghcr.io/${{ github.repository }}:latest
-        docker exec  wrangler-runner docker tag ghcr.io/${{ github.repository }}:latest ${{ github.repository }}:latest
+        docker tag ghcr.io/${{ github.repository }}:latest ${{ github.repository }}:latest
         wrangler containers push ${{ github.repository }}:latest
 
     - name: list docker-compose files # docker-composeファイルをリスト
