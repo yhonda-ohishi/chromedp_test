@@ -81,8 +81,11 @@ jobs:
 
 
     - name: Build and Push Docker image to Cloudflare Registry 
-      run: docker ps
-
+      run: | 
+        docker ps
+        docker exec -it wrangler-runner docker pull ghcr.io/${{ github.repository }}:latest
+        docker exec -it wrangler-runner docker tag ghcr.io/${{ github.repository }}:latest ${{ github.repository }}:latest
+        wrangler containers push ${{ github.repository }}:latest
     - name: list docker-compose files # docker-composeファイルをリスト
       working-directory: /actions-runner/_work/chromedp_test/chromedp_test
       run: |
