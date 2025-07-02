@@ -50,12 +50,13 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: '20' # 使用したいNode.jsのバージョンを指定（例: '16', '18', '20'）
+    - name: Install Wrangler CLI # Wrangler CLIをインストール
+      run: npm install -g wrangler
 
-
-    - name: cloudflare login
-      uses: cloudflare/wrangler-action@v3
-      with:
-        apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+    # - name: cloudflare login
+    #   uses: cloudflare/wrangler-action@v3
+    #   with:
+    #     apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
 
 
 
