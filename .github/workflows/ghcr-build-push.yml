@@ -45,6 +45,13 @@ jobs:
         # GitHub ActionsのGITHUB_TOKENをパスワードとして使用し、GHCRにログイン
         echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
+    # Node.jsのセットアップステップを追加
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20' # 使用したいNode.jsのバージョンを指定（例: '16', '18', '20'）
+
+
     - name: cloudflare login
       uses: cloudflare/wrangler-action@v3
       with:
