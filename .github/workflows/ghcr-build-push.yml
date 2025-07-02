@@ -73,12 +73,13 @@ jobs:
           ghcr.io/${{ github.repository }}:latest  
 
 
-    - name: Build and Push Docker image to Cloudflare Registry 
+    - name: Build and Push Docker image to Cloudflare Registry
+      working-directory: /actions-runner/_work/chromedp_test/chromedp_test
       # run: | 
       #   docker tag ghcr.io/${{ github.repository }}:latest test-image:latest
       #   wrangler containers push test-image:latest
       run: | 
-        wrangler containers build ./dockerfile --push --tag test-image:latest
+        wrangler containers build . --push --tag test-image:latest
 
     - name: list docker-compose files # docker-composeファイルをリスト
       working-directory: /actions-runner/_work/chromedp_test/chromedp_test
