@@ -53,6 +53,14 @@ jobs:
     - name: Install Wrangler CLI # Wrangler CLIをインストール
       run: npm install -g wrangler
 
+
+    - name: Log in to Cloudflare Registry # Cloudflare Registryへのログイン
+      run: |
+        # wrangler login コマンドを使用してCloudflare Registryにログインします。
+        # これにより、Dockerの認証情報が適切に設定され、docker push が可能になります。
+        echo "${{ secrets.CLOUDFLARE_API_TOKEN }}" | wrangler login --api-token
+      env:
+        CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
     # - name: cloudflare login
     #   uses: cloudflare/wrangler-action@v3
     #   with:
