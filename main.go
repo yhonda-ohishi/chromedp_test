@@ -96,23 +96,63 @@ func setDefaultPort() string {
 }
 
 func downloadEtcMeisai(requestData requestData) error {
+	log.Println("ChromeDP初期化を開始します...")
 
-	// コンテキストの作成: タイムアウトとデバッグ出力を設定
+	// Cloudflare Containers環境に特化したChrome設定
 	opts := append(chromedp.DefaultExecAllocatorOptions[:],
+		// 基本的な設定
+		chromedp.Flag("headless", true),
+		chromedp.Flag("no-sandbox", true),
 		chromedp.Flag("disable-gpu", true),
-		// chromedp.Flag("headless", false), // headlessモードを無効にする
+		chromedp.Flag("disable-dev-shm-usage", true),
+
+		// パフォーマンス向上
+		chromedp.Flag("disable-extensions", true),
+		chromedp.Flag("disable-plugins", true),
+		chromedp.Flag("disable-images", true),
+		chromedp.Flag("disable-javascript", false), // JavaScriptは有効にする
+
+		// 安定性向上
+		chromedp.Flag("disable-background-timer-throttling", true),
+		chromedp.Flag("disable-backgrounding-occluded-windows", true),
+		chromedp.Flag("disable-renderer-backgrounding", true),
+		chromedp.Flag("disable-features", "TranslateUI,BlinkGenPropertyTrees"),
+
+		// ネットワーク関連
+		chromedp.Flag("ignore-certificate-errors", true),
+		chromedp.Flag("ignore-ssl-errors", true),
+		chromedp.Flag("allow-running-insecure-content", true),
+
+		// デバッグ設定（簡素化）
+		chromedp.Flag("remote-debugging-port", "9222"),
+		chromedp.Flag("remote-debugging-address", "127.0.0.1"),
+
+		// ユーザーデータディレクトリ
+		chromedp.Flag("user-data-dir", "/tmp/chrome-user-data"),
+
+		// ウィンドウサイズ
+		chromedp.WindowSize(1920, 1080),
 	)
+
+	// ExecAllocatorを作成
 	allocCtx, cancel1 := chromedp.NewExecAllocator(context.Background(), opts...)
 	defer cancel1()
 
-	ctx, cancel := chromedp.NewContext(allocCtx)
+	// コンテキストを作成
+	ctx, cancel := chromedp.NewContext(allocCtx, chromedp.WithLogf(log.Printf))
 	defer cancel()
 
-	var err error
-
-	// 操作全体のタイムアウトを設定
-	ctx, cancel = context.WithTimeout(ctx, 120*time.Second)
+	// より長いタイムアウトを設定
+	ctx, cancel = context.WithTimeout(ctx, 180*time.Second) // 3分に設定
 	defer cancel()
+
+	// 簡単な接続テスト
+	log.Println("ChromeDP接続テストを開始します...")
+	err := chromedp.Run(ctx, chromedp.Navigate("about:blank"))
+	if err != nil {
+		return fmt.Errorf("ChromeDP接続に失敗しました: %v", err)
+	}
+	log.Println("ChromeDP接続成功しました")
 	done := make(chan string, 1)
 
 	chromedp.ListenTarget(ctx, func(v interface{}) {
@@ -496,6 +536,8 @@ func setDialogBehavior(ctx context.Context) {
 }
 
 func setDownloadBehavior(ctx context.Context, downloadPath string, filename string) error {
+	log.Println("ダウンロード設定を開始します...")
+
 	currentDir, err := os.Getwd()
 	if err != nil {
 		log.Println("現在のディレクトリの取得に失敗:", err)
@@ -509,6 +551,7 @@ func setDownloadBehavior(ctx context.Context, downloadPath string, filename stri
 	}
 
 	currentDir = filepath.Join(currentDir, downloadPath) // ダウンロードの保存先を指定
+	log.Printf("ダウンロード保存先: %s", currentDir)
 
 	//folderの中のfileを削除
 	files, err := os.ReadDir(currentDir)
@@ -527,21 +570,17 @@ func setDownloadBehavior(ctx context.Context, downloadPath string, filename stri
 		log.Println("ファイルを削除しました:", file.Name())
 	}
 
-	// if err := chromedp.Run(ctx, browser.SetDownloadBehavior(browser.SetDownloadBehaviorBehaviorAllow).WithDownloadPath(currentDir).WithEventsEnabled(true)); err != nil {
-	// 	log.Println("ダウンロードの保存先の設定に失敗:", err)
-	// } else {
-	// 	log.Printf("ダウンロードの保存先を設定しました: %s", currentDir)
-	// }
-	// ダウンロードするファイルの名前を指定
-	if err := chromedp.Run(ctx, browser.SetDownloadBehavior(browser.SetDownloadBehaviorBehaviorAllow).
-		// ダウンロードの保存先を指定
-		// ここで指定したパスにダウンロードされます
+	// シンプルなダウンロード設定
+	err = chromedp.Run(ctx, browser.SetDownloadBehavior(browser.SetDownloadBehaviorBehaviorAllow).
 		WithDownloadPath(currentDir).
-		WithEventsEnabled(true)); err != nil {
-		log.Println("ダウンロードの保存先の設定に失敗:", err)
+		WithEventsEnabled(true))
+
+	if err != nil {
+		log.Printf("ダウンロードの保存先の設定に失敗: %v", err)
 		return err
 	}
 
+	log.Printf("ダウンロードの保存先を設定しました: %s", currentDir)
 	return nil
 }
 

@@ -1,3 +1,4 @@
 tmp/*
 download/*
 .env
+node_modules/

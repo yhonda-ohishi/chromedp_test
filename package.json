@@ -1,0 +1,13 @@
+{
+  "name": "cloudflare-worker",
+  "scripts": {
+    "dev": "wrangler dev",
+    "build": "wrangler build",
+    "deploy": "wrangler deploy",
+    "deployTail": "wrangler deploy && wrangler tail"
+  },
+  "dependencies": {
+    "@cloudflare/containers": "^0.0.18",
+    "wrangler": "^4.22.0"
+  }
+}

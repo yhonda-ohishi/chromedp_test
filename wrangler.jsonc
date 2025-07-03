@@ -1,0 +1,33 @@
+{
+    "name": "container-starter",
+    "main": "index.js",
+    "compatibility_date": "2025-07-03",
+    "containers": [
+        {
+            "class_name": "MyContainer",
+            "image": "./Dockerfile",
+            "instances": 1,
+            "name": "hello-containers-go",
+            "instance_type": "standard"
+        }
+    ],
+    "durable_objects": {
+        "bindings": [
+            {
+                "class_name": "MyContainer",
+                "name": "MY_CONTAINER"
+            }
+        ]
+    },
+    "migrations": [
+        {
+            "new_sqlite_classes": [
+                "MyContainer"
+            ],
+            "tag": "v1"
+        }
+    ],
+    "observability": {
+        "enabled": true
+    }
+}
