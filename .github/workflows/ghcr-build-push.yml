@@ -109,18 +109,13 @@ jobs:
     #     wrangler login --api-token "${{ secrets.CLOUDFLARE_API_TOKEN }}"
 
 
-    - uses: actions/checkout@v4
     - name: Build & Deploy Worker
-      uses: cloudflare/wrangler-action@v3
+      uses: cloudflare/wrangler-action@v3 # wrangler-action を使用
       with:
         apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
         accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-      run: |
-        # DockerイメージをビルドしてCloudflareにプッシュ
-        echo "Building and pushing Docker image to Cloudflare Registry..."
-        wrangler containers build . --push --tag test-image:latest
-        # ここで、Dockerfileがあるディレクトリを指定しています。
-        # --verbose オプションは、詳細なログを出力します。
+        command: wrangler containers build . --push --tag test-image:latest # Cloudflare Workersをデプロイするコマンド
+        version: 4.23.0 # Wranglerのバージョンを指定
 
 
     - name: list docker-compose files # docker-composeファイルをリスト
