@@ -115,7 +115,7 @@ jobs:
         apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
         accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         command: wrangler containers build . --push --tag test-image:latest # Cloudflare Workersをデプロイするコマンド
-        version: 4.23.0 # Wranglerのバージョンを指定
+        wranglerVersion: 4.23.0 # Wranglerのバージョンを指定
 
 
     - name: list docker-compose files # docker-composeファイルをリスト
