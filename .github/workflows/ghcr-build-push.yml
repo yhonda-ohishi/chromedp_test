@@ -81,6 +81,14 @@ jobs:
     #     ls
     #     wrangler containers build . --push --tag test-image:latest
 
+    - name: Set up Node.js and npm (for Wrangler) # WranglerがNode.jsベースなので必要
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - name: Install latest Wrangler CLI globally
+      run: npm install -g wrangler@latest # 
+
     # ★★★ ここから修正 ★★★
     - name: Build and Push Docker image to Cloudflare Registry
       uses: cloudflare/wrangler-action@v3 # wrangler-action を使用
