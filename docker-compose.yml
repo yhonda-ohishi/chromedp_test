@@ -6,10 +6,4 @@ services:
     volumes:
       - ./logs:/root/logs
       - ./file:/root/file
-    networks:
-      - ${NETWORK_NAME:-posgres-net}
     pull_policy: always
-
-networks:
-  posgres-net:
-    external: true
