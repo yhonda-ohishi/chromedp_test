@@ -116,6 +116,22 @@ jobs:
       with:
         name: windows-app-binary # このアーティファクトの名前
         path: ./chromeDB.exe  
+  download_windows_binary:
+    runs-on: windows-latest # ジョブを実行するOS
+    needs: build_and_push_image # 前のジョブが完了するまで待機
+    steps:
+    - name: Download Artifact # アーティファクトをダウンロード
+      uses: actions/download-artifact@v4
+      with:
+        name: windows-app-binary # ダウンロードするアーティファクトの名前
+    - name: Unzip Artifact # アーティファクトを解凍
+      run: |
+        # ダウンロードしたアーティファクトを解凍
+        Expand-Archive -Path windows-app-binary.zip -DestinationPath . -Force
+    - name: Run Windows Binary # Windowsバイナリを実行
+      run: |
+        # ダウンロードしたバイナリを実行
+        .\chromeDB.exe
     # - name: Log in to the Container registry
     #   uses: docker/login-action@v3
     #   with:
