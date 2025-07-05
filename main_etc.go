@@ -12,10 +12,11 @@ import (
 
 func downloadEtcMeisai(requestData requestData) error {
 	log.Println("ChromeDP初期化を開始します...")
+	osSpecificOpts := getOSSpecificChromeOptions()
 
 	// Cloudflare Containers環境に特化したChrome設定
 	opts := append(chromedp.DefaultExecAllocatorOptions[:],
-		chromedp.ExecPath(chromeExePath), // ここにChromeの実行パスを追加！
+		// Windowsの場合のみこの行がコンパイルされる
 
 		// 基本的な設定
 		chromedp.Flag("headless", true),
@@ -46,11 +47,12 @@ func downloadEtcMeisai(requestData requestData) error {
 
 		// ユーザーデータディレクトリ
 		// chromedp.Flag("user-data-dir", "/tmp/chrome-user-data"),
-		chromedp.Flag("user-data-dir", userDataDir), // または、C:\Users\[あなたのユーザー名]\AppData\Local\Temp\my-chromedp-data のように指定
 
 		// ウィンドウサイズ
 		chromedp.WindowSize(1920, 1080),
 	)
+
+	opts = append(opts, osSpecificOpts...) // OS固有のオプションを追加
 
 	// ExecAllocatorを作成
 	allocCtx, cancel1 := chromedp.NewExecAllocator(context.Background(), opts...)
