@@ -2,3 +2,5 @@ tmp/*
 download/*
 .env
 node_modules/
+.wrangler/
+chromeDB.exe

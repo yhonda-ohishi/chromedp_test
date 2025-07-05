@@ -47,7 +47,7 @@ func main() {
 		if isProcessing {
 			processingMutex.Unlock()
 			w.Header().Set("Content-Type", "application/json")
-			fmt.Fprintf(w, `{"status": "error", "message": "既に処理が実行中です。"}`)
+			fmt.Fprintf(w, `{"status": "error", "message": "既にetc-meisaiのダウンロード処理が実行中です。"}`)
 			return
 		}
 		isProcessing = true
@@ -191,7 +191,7 @@ func downloadEtcMeisai(requestData requestData) error {
 		filenameArray[i] = request.RisLoginId + ".csv"
 	}
 	for _, request := range requestData.Data {
-		log.Printf("ログインID: %s, パスワード: %s", request.RisLoginId, request.RisPassword)
+		log.Printf("ログインID: %s, パスワード: ***", request.RisLoginId)
 
 		// ブラウザ操作のタスクを実行
 		if err = chromedp.Run(ctx, chromedp.Navigate(targetURL)); err != nil {
