@@ -82,7 +82,6 @@ jobs:
         wrangler containers build . --push --tag test-image:latest
 
     - name: list docker-compose files # docker-composeファイルをリスト
-      working-directory: ~/actions-runner/_work/chromedp_test/chromedp_test
       run: |
         # /app/docker-composeディレクトリに移動して、ファイルをリスト
         ls -l
