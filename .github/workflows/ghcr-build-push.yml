@@ -128,7 +128,7 @@ jobs:
     #   run: |
     #     # ダウンロードしたアーティファクトを解凍
     #     Expand-Archive -Path windows-app-binary.zip -DestinationPath . -Force
-    # - name: Check current directory and downloaded files
+    - name: Check current directory and downloaded files
       run: |
         pwd
         Get-ChildItem -Recurse . # Windows (PowerShell) の場合
