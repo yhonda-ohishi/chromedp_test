@@ -1,0 +1,34 @@
+[build]
+# ビルドコマンドを変更し、明示的に main_linux.go をビルド対象に指定します。
+# -o ./tmp/main は、ビルドされた実行ファイルの名前と出力先を指定します。
+cmd = "go build -o ./tmp/main.exe ."
+# ビルドされた実行ファイルのパス
+bin = "./tmp/main.exe"
+# 監視対象から除外するディレクトリ
+exclude_dir = ["vendor", "tmp", "node_modules","download"]
+
+# アプリケーションの実行に関する設定
+[run]
+# 実行するコマンド（ビルドされた実行ファイルのパス）
+cmd = "./tmp/main.exe"
+# env = ["PORT=8080"] # 必要に応じて環境変数を設定
+
+# 監視に関する設定
+[watch]
+# 監視するディレクトリ
+dir = ["."]
+# 監視するファイル拡張子
+ext = ["go", "tpl", "html", "css", "js", "json", "yml", "toml"]
+# 監視対象から除外するファイルパターン
+# ign = ["**/*.swp"]
+
+# ホットリロードに関する設定
+[auto_refresh]
+enable = false
+
+# その他の設定
+[log]
+level = "debug"
+
+[color]
+disable = false
