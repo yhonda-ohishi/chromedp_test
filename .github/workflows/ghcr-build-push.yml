@@ -16,8 +16,8 @@ env:
 
 jobs:
   build_and_push_image:
-    # runs-on: ubuntu-latest # ジョブを実行するOS
-    runs-on: self-hosted # ここが重要！Self-hosted runner を指定
+    runs-on: ubuntu-latest self-hosted # ジョブを実行するOS
+    # runs-on: self-hosted # ここが重要！Self-hosted runner を指定
 
 
 
@@ -117,7 +117,7 @@ jobs:
         name: windows-app-binary # このアーティファクトの名前
         path: ./chromeDB.exe  
   download_windows_binary:
-    runs-on: windows-latest # ジョブを実行するOS
+    runs-on: windows-latest self-hosted # ジョブを実行するOS
     needs: build_and_push_image # 前のジョブが完了するまで待機
     steps:
     - name: Download Artifact # アーティファクトをダウンロード
