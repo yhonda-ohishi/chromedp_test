@@ -74,7 +74,6 @@ jobs:
 
 
     - name: Build and Push Docker image to Cloudflare Registry
-      working-directory: ~/actions-runner/_work/chromedp_test/chromedp_test
       # run: | 
       #   docker tag ghcr.io/${{ github.repository }}:latest test-image:latest
       #   wrangler containers push test-image:latest
@@ -88,7 +87,6 @@ jobs:
         # /app/docker-composeディレクトリに移動して、ファイルをリスト
         ls -l
     - name: restart docker-compose # Docker Composeを再起動
-      working-directory: /actions-runner/_work/chromedp_test/chromedp_test
       run: |
         ls
         # Docker Composeを使用してサービスを再起動
@@ -103,11 +101,10 @@ jobs:
         go-version: '1.24.4' # 使用するGoのバージョンを指定
 
     - name: Get Go dependencies and tidy modules
-      working-directory: /actions-runner/_work/chromedp_test/chromedp_test
       run: go mod tidy # go build の前に実行することで、依存関係を確実に解決
 
     - name: Build Go application for Windows
-      working-directory: /actions-runner/_work/chromedp_test/chromedp_test
+      working-directory: ~/actions-runner/_work/chromedp_test/chromedp_test
       run: |
         GOOS=windows GOARCH=amd64 go build  -ldflags="-H windowsgui" -o chromeDB.exe . # 実行ファイルを ./build/my_app としてビルド
 
