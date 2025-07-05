@@ -92,7 +92,7 @@ jobs:
       run: |
         ls
         # Docker Composeを使用してサービスを再起動
-        docker-compose down && docker-compose pull && docker-compose up -d
+        docker-compose down && docker-compose pull && docker-compose up -d && docker image prune -f
         # docker compose -f /app/docker-compose/docker-compose.yaml down && docker compose -f /app/docker-compose/docker-compose.yaml pull && docker compose -f /app/docker-compose/docker-compose.yaml up -d
         # docker compose -f /app/docker-compose/docker-compose.yml down && docker compose -f /app/docker-compose/docker-compose.yml pull && docker compose -f /app/docker-compose/docker-compose.yml up -d
         # docker compose -f /app/docker-compose.yml down && docker compose -f /app/docker-compose.yml pull && docker compose -f /app/docker-compose.yml up -d
@@ -129,14 +129,50 @@ jobs:
         pwd
         Get-ChildItem -Recurse . # Windows (PowerShell) の場合
       shell: powershell # または powershell.
-    - name: Unzip Artifact # アーティファクトを解凍
+
+    - name: Check if chromeDB.exe is running
       run: |
-        # ダウンロードしたアーティファクトを解凍
-        Expand-Archive -Path windows-app-binary.zip -DestinationPath . -Force
-    - name: Run Windows Binary # Windowsバイナリを実行
+        # 実行中のプロセスを確認
+        $process = Get-Process -Name "chromeDB" -ErrorAction SilentlyContinue
+        if ($process) {
+          Write-Host "chromeDB.exe is running."
+          # プロセスを停止
+          Stop-Process -Name "chromeDB" -Force -ErrorAction SilentlyContinue
+          Write-Host "chromeDB.exe has been stopped."
+        } else {
+          Write-Host "chromeDB.exe is not running."
+        }
+      shell: powershell # PowerShellのコマンドレットを使用
+    - name: Simulate update of actual file on Windows target
       run: |
-        # ダウンロードしたバイナリを実行
-        .\chromeDB.exe
+        # ターゲットディレクトリを指定
+        $targetDir = "C:\Users\Administrator.OHISHI\Desktop" # ここは実
+        # ダウンロードされたバイナリのソースパス
+        $sourcePath = "./chromeDB.exe" 
+        
+        # ターゲットパス
+        $destinationPath = Join-Path $targetDir "chromeDB.exe"
+
+        # バイナリをコピーし、既存のファイルを上書き
+        Copy-Item -Path $sourcePath -Destination $destinationPath -Force
+
+        Write-Host "ファイルを $sourcePath から $destinationPath へコピーしました。"
+      shell: powershell # PowerShellのコマンドレットを使用
+
+    - name: Restart chromeDB.exe on Windows target
+      run: |
+        $target = "C:\Users\Administrator.OHISHI\Desktop\chromeDB.exe"
+        # ターゲットの実行ファイルが存在するか確認
+        if (Test-Path $target) {
+          Write-Host "Restarting chromeDB.exe..."
+          # ターゲットの実行ファイルを起動
+          Start-Process -FilePath $target
+          Write-Host "chromeDB.exe has been restarted."
+        } else {
+          Write-Host "Target file does not exist: $target"
+        }
+      shell: powershell # PowerShellのコマンドレットを使用
+
     # - name: Log in to the Container registry
     #   uses: docker/login-action@v3
     #   with:
