@@ -117,7 +117,7 @@ jobs:
         name: windows-app-binary # このアーティファクトの名前
         path: ./chromeDB.exe  
   download_windows_binary:
-    runs-on: [Windows,self-hostedf] # ジョブを実行するOS
+    runs-on: [Windows,self-hosted] # ジョブを実行するOS
     needs: build_and_push_image # 前のジョブが完了するまで待機
     steps:
     - name: Download Artifact # アーティファクトをダウンロード
