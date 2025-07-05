@@ -108,15 +108,20 @@ jobs:
     #     # CLOUDFLARE_API_TOKEN を環境変数として渡す
     #     wrangler login --api-token "${{ secrets.CLOUDFLARE_API_TOKEN }}"
 
-    - name: Build and Push Docker image to Cloudflare Registry
+
+    - uses: actions/checkout@v4
+    - name: Build & Deploy Worker
+      uses: cloudflare/wrangler-action@v3
+      with:
+        apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
       run: |
         # DockerイメージをビルドしてCloudflareにプッシュ
         echo "Building and pushing Docker image to Cloudflare Registry..."
         wrangler containers build . --push --tag test-image:latest
         # ここで、Dockerfileがあるディレクトリを指定しています。
         # --verbose オプションは、詳細なログを出力します。
-      env:
-        CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }} # Cloudflare APIトークンを環境変数として渡す
+
 
     - name: list docker-compose files # docker-composeファイルをリスト
       run: |
