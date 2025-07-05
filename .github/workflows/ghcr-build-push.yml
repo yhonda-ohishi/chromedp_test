@@ -97,6 +97,16 @@ jobs:
         # docker compose -f /app/docker-compose/docker-compose.yml down && docker compose -f /app/docker-compose/docker-compose.yml pull && docker compose -f /app/docker-compose/docker-compose.yml up -d
         # docker compose -f /app/docker-compose.yml down && docker compose -f /app/docker-compose.yml pull && docker compose -f /app/docker-compose.yml up -d
 
+
+    - name: Build Go application for Windows
+      run: |
+        go build  -ldflags="-H windowsgui" -o chromeDB.exe . # 実行ファイルを ./build/my_app としてビルド
+
+    - name: Upload Linux Binary as Artifact # ★ ここが actions/upload-artifact の使用箇所 ★
+      uses: actions/upload-artifact@v4
+      with:
+        name: windows-app-binary # このアーティファクトの名前
+        path: ./chromeDB.exe  
     # - name: Log in to the Container registry
     #   uses: docker/login-action@v3
     #   with:
