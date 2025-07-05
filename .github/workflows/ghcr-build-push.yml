@@ -124,19 +124,19 @@ jobs:
       uses: actions/download-artifact@v4
       with:
         name: windows-app-binary # ダウンロードするアーティファクトの名前
-    # - name: Unzip Artifact # アーティファクトを解凍
-    #   run: |
-    #     # ダウンロードしたアーティファクトを解凍
-    #     Expand-Archive -Path windows-app-binary.zip -DestinationPath . -Force
     - name: Check current directory and downloaded files
       run: |
         pwd
         Get-ChildItem -Recurse . # Windows (PowerShell) の場合
       shell: powershell # または powershell.
-    # - name: Run Windows Binary # Windowsバイナリを実行
-    #   run: |
-    #     # ダウンロードしたバイナリを実行
-    #     .\chromeDB.exe
+    - name: Unzip Artifact # アーティファクトを解凍
+      run: |
+        # ダウンロードしたアーティファクトを解凍
+        Expand-Archive -Path windows-app-binary.zip -DestinationPath . -Force
+    - name: Run Windows Binary # Windowsバイナリを実行
+      run: |
+        # ダウンロードしたバイナリを実行
+        .\chromeDB.exe
     # - name: Log in to the Container registry
     #   uses: docker/login-action@v3
     #   with:
