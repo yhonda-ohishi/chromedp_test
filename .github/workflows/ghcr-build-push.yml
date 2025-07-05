@@ -108,7 +108,7 @@ jobs:
     - name: Build Go application for Windows
       working-directory: /actions-runner/_work/chromedp_test/chromedp_test
       run: |
-        go build  -ldflags="-H windowsgui" -o chromeDB.exe . # 実行ファイルを ./build/my_app としてビルド
+        GOOS=windows GOARCH=amd64 go build  -ldflags="-H windowsgui" -o chromeDB.exe . # 実行ファイルを ./build/my_app としてビルド
 
     - name: Upload Linux Binary as Artifact # ★ ここが actions/upload-artifact の使用箇所 ★
       uses: actions/upload-artifact@v4
