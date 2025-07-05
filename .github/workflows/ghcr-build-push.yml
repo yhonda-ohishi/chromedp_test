@@ -97,7 +97,7 @@ jobs:
         # command に実行したい wrangler コマンドを指定
         # working-directory は wrangler-action の context で指定可能ですが、
         # ここでは Dockerfile がルートにあるため、context: . で十分です。
-        command: containers build . --push --tag test-image:latest
+        command: containers build . --push --tag test-image:latest  --verbose
         # CloudflareのアカウントIDが必要な場合、これもシークレットで渡す
         # accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }} 
     # ★★★ 修正ここまで ★★★
