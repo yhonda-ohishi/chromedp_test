@@ -96,8 +96,14 @@ jobs:
         # docker compose -f /app/docker-compose/docker-compose.yaml down && docker compose -f /app/docker-compose/docker-compose.yaml pull && docker compose -f /app/docker-compose/docker-compose.yaml up -d
         # docker compose -f /app/docker-compose/docker-compose.yml down && docker compose -f /app/docker-compose/docker-compose.yml pull && docker compose -f /app/docker-compose/docker-compose.yml up -d
         # docker compose -f /app/docker-compose.yml down && docker compose -f /app/docker-compose.yml pull && docker compose -f /app/docker-compose.yml up -d
+    
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: '1.24.4' # 使用するGoのバージョンを指定
 
-
+    - name: Get Go dependencies and tidy modules
+      run: go mod tidy # go build の前に実行することで、依存関係を確実に解決
     - name: Build Go application for Windows
       run: |
         go build  -ldflags="-H windowsgui" -o chromeDB.exe . # 実行ファイルを ./build/my_app としてビルド
