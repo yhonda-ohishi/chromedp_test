@@ -73,13 +73,26 @@ jobs:
           ghcr.io/${{ github.repository }}:latest  
 
 
+    # - name: Build and Push Docker image to Cloudflare Registry
+    #   # run: | 
+    #   #   docker tag ghcr.io/${{ github.repository }}:latest test-image:latest
+    #   #   wrangler containers push test-image:latest
+    #   run: | 
+    #     ls
+    #     wrangler containers build . --push --tag test-image:latest
+
+    # ★★★ ここから修正 ★★★
     - name: Build and Push Docker image to Cloudflare Registry
-      # run: | 
-      #   docker tag ghcr.io/${{ github.repository }}:latest test-image:latest
-      #   wrangler containers push test-image:latest
-      run: | 
-        ls
-        wrangler containers build . --push --tag test-image:latest
+      uses: cloudflare/wrangler-action@v3 # wrangler-action を使用
+      with:
+        apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }} # Cloudflare APIトークンをシークレットとして渡す
+        # command に実行したい wrangler コマンドを指定
+        # working-directory は wrangler-action の context で指定可能ですが、
+        # ここでは Dockerfile がルートにあるため、context: . で十分です。
+        command: containers build . --push --tag test-image:latest
+        # CloudflareのアカウントIDが必要な場合、これもシークレットで渡す
+        # accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }} 
+    # ★★★ 修正ここまで ★★★
 
     - name: list docker-compose files # docker-composeファイルをリスト
       run: |
