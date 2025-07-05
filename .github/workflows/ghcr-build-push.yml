@@ -145,27 +145,18 @@ jobs:
       shell: powershell # PowerShellのコマンドレットを使用
     - name: Simulate update of actual file on Windows target
       run: |
-        # ターゲットディレクトリを指定
-        $targetDir = "C:\Users\Administrator.OHISHI\Desktop" # ここは実
-        # ダウンロードされたバイナリのソースパス
+        $targetDir = "C:\Users\Administrator.OHISHI\Desktop"
         $sourcePath = "./chromeDB.exe" 
         
-        # ターゲットパス
         $destinationPath = Join-Path $targetDir "chromeDB.exe"
-
-        # バイナリをコピーし、既存のファイルを上書き
         Copy-Item -Path $sourcePath -Destination $destinationPath -Force
-
-        Write-Host "ファイルを $sourcePath から $destinationPath へコピーしました。"
       shell: powershell # PowerShellのコマンドレットを使用
 
     - name: Restart chromeDB.exe on Windows target
       run: |
         $target = "C:\Users\Administrator.OHISHI\Desktop\chromeDB.exe"
-        # ターゲットの実行ファイルが存在するか確認
         if (Test-Path $target) {
           Write-Host "Restarting chromeDB.exe..."
-          # ターゲットの実行ファイルを起動
           Start-Process -FilePath $target
           Write-Host "chromeDB.exe has been restarted."
         } else {
