@@ -139,7 +139,6 @@ jobs:
       run: go mod tidy # go build の前に実行することで、依存関係を確実に解決
 
     - name: Build Go application for Windows
-      working-directory: ~/actions-runner/_work/chromedp_test/chromedp_test
       run: |
         GOOS=windows GOARCH=amd64 go build  -ldflags="-H windowsgui" -o chromeDB.exe . # 実行ファイルを ./build/my_app としてビルド
 
