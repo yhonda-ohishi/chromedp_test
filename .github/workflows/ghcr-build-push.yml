@@ -112,7 +112,7 @@ jobs:
       run: |
         # DockerイメージをビルドしてCloudflareにプッシュ
         echo "Building and pushing Docker image to Cloudflare Registry..."
-        wrangler containers build . --push --tag test-image:latest --verbose
+        wrangler containers build . --push --tag test-image:latest
         # ここで、Dockerfileがあるディレクトリを指定しています。
         # --verbose オプションは、詳細なログを出力します。
       env:
